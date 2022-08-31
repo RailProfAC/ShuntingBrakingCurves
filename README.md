@@ -1,8 +1,6 @@
 # ShuntingBrakingCurves
 
-Code and Data for Paper *Braking curves in low-speed on-sight operation
-- A simulation study for the development of assistance and automation systems
-*
+Code and Data for Paper 'Braking curves in low-speed on-sight operation - A simulation study for the development of assistance and automation systems'
 
 ## Code
 
