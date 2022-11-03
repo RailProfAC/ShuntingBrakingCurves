@@ -5,7 +5,7 @@ import seaborn as sns
 # Time package for performance measurements
 import time
 # Statistics package for rare event simulation
-from scipy.stats import norm
+#from scipy.stats import norm
 # Pandas for convenient table export
 import pandas as pd
 # Multiprocessing package for parallelisation
@@ -30,7 +30,7 @@ def muBr(v,F):
 def ShuntingBrakeCalculation(data):
     c = 250 # brake propagation velocity
     #FL = FLoco #Loco braking force
-    dt = 0.05
+    dt = 0.01
     s = 0
     t = 0
     # Import data from input
@@ -105,7 +105,7 @@ def main():
     np.random.seed(42) # Fix seed
     v0 = 25/3.6
     N = 5 # Number of wagons
-    M = 1e4 # Number of MC iterations
+    M = 1e7 # Number of MC iterations
     # Critical distances
     distcrit = [64, 65, 66, 67, 68, 69]
     slist = [] # List for storage of individual distances
@@ -116,17 +116,17 @@ def main():
                 'mloco': mLoco,
                 'Floco': FLoco,
                 'lloco': 10.5,
-                'tfloco': 24,
-                'Gloco': 1,
+                'tfloco': 4,
+                'Gloco': 0,
                 'm' : 90000*np.ones(N), # Mass of individual wagons
                 'mrot': 1.04*np.ones(N), # Dynamic augment
-                'G' : np.ones(N), # G mode of individual wagon
+                'G' : np.zeros(N), # G mode of individual wagon
                 'Cdia': 0.406*np.ones(N), # Cylinder diameter
                 'p' : np.random.normal(loc = 3.8e5, scale = 5e3, size = N),
                 'l' : 14*np.ones(N),
                 'i' : 5.65*np.ones(N), #4 axle, loaded
                 'eta' : np.random.normal(loc = 0.83, scale = 0.02, size = N),
-                'tf' : np.random.normal(loc = 24, scale = 2, size = N),
+                'tf' : np.random.normal(loc = 4, scale = 0.33, size = N),
                 'n' : 16*np.ones(N), # Number of brake blocks
                 'muc': np.random.normal(loc = 1, scale = 0.025, size = N) # Friction correction factor
                }
@@ -149,35 +149,33 @@ def main():
                  color = 'navy', label = 'Probability Density', bins = 20)
     plt.ylabel('Probability')
     plt.xlabel('s/m')
-    plt.show()
     # # Uncomment to save figure
-    # plt.savefig('Class363' + str(N) +
-    #             'WagonsG'+str(round(v0))+
-    #             'M' + str(M) +'.pdf')
-    # # Print statistical values
-    # print('Mean: ' + str(np.mean(slist)))
-    # print('SD  : ' + str(np.std(slist)))
-    # ssorted = np.sort(slist)
-    # if M >= 1e7:
-    #     print('p = 1e-5 for: ' + str(ssorted[-101]))
-    # print('Longest: ' + str(ssorted[-1]))
-    # # Analyse for relative frequency of braking distance above threshold
-    # df = pd.DataFrame(columns = ['s', 'p'])
-    # for d in distcrit:
-    #     p, b = np.histogram(slist, bins = [0, d, 1e6])
-    #     p = p/M
-    #     print('p(s> ' + str(d) + 'm) = ' + str(p[1]))
-    #     df.loc[len(df.index)] = [d, p[1]]
-    # # Uncomment to save data
-    # df.to_excel('Class363' + str(N) +
-    #             'WagonsG'+str(round(v0))+
-    #             'M' + str(M) +'.xlsx', index=False)
+    plt.savefig('plots/Class363' + str(N) +
+                'WagonsP'+str(round(v0))+
+                'M' + str(M) +'.pdf')
+    # Print statistical values
+    print('Mean: ' + str(np.mean(slist)))
+    print('SD  : ' + str(np.std(slist)))
+    ssorted = np.sort(slist)
+    if M >= 1e7:
+        print('p = 1e-5 for: ' + str(ssorted[-101]))
+    print('Longest: ' + str(ssorted[-1]))
+    # Analyse for relative frequency of braking distance above threshold
+    df = pd.DataFrame(columns = ['s', 'p'])
+    for d in distcrit:
+        p, b = np.histogram(slist, bins = [0, d, 1e6])
+        p = p/M
+        print('p(s> ' + str(d) + 'm) = ' + str(p[1]))
+        df.loc[len(df.index)] = [d, p[1]]
+    # Uncomment to save data
+    df.to_excel('data/Class363' + str(N) +
+                'WagonsP'+str(round(v0))+
+                'M' + str(M) +'.xlsx', index=False)
     print('Time: ' + str(np.round(elapsed, decimals = 2)) + ' s')
-    # df2 = pd.DataFrame(data = slist, columns = ['s'])
-    # # Uncomment to save data
-    # # Save data to file
-    # df2.to_csv('Class363' + str(N) +
-    #             'WagonsG'+str(round(v0))+
-    #             'M' + str(M) +'Distances.csv')
+    df2 = pd.DataFrame(data = slist, columns = ['s'])
+    # Uncomment to save data
+    df2.to_csv('data/Class363' + str(N) +
+                'WagonsP'+str(round(v0))+
+                'M' + str(M) +'Distances.csv')
 
 main()
