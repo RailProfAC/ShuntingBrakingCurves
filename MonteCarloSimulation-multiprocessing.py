@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 # Time package for performance measurements
 import time
-# Statistics package for rare event simulation
-#from scipy.stats import norm
 # Pandas for convenient table export
 import pandas as pd
 # Multiprocessing package for parallelisation
@@ -150,9 +148,9 @@ def main():
     plt.ylabel('Probability')
     plt.xlabel('s/m')
     # # Uncomment to save figure
-    plt.savefig('plots/Class363' + str(N) +
-                'WagonsP'+str(round(v0))+
-                'M' + str(M) +'.pdf')
+    # plt.savefig('plots/Class363' + str(N) +
+    #             'WagonsP'+str(round(v0))+
+    #             'M' + str(M) +'.pdf')
     # Print statistical values
     print('Mean: ' + str(np.mean(slist)))
     print('SD  : ' + str(np.std(slist)))
@@ -168,14 +166,14 @@ def main():
         print('p(s> ' + str(d) + 'm) = ' + str(p[1]))
         df.loc[len(df.index)] = [d, p[1]]
     # Uncomment to save data
-    df.to_excel('data/Class363' + str(N) +
-                'WagonsP'+str(round(v0))+
-                'M' + str(M) +'.xlsx', index=False)
+    # df.to_excel('data/Class363' + str(N) +
+    #             'WagonsP'+str(round(v0))+
+    #             'M' + str(M) +'.xlsx', index=False)
     print('Time: ' + str(np.round(elapsed, decimals = 2)) + ' s')
     df2 = pd.DataFrame(data = slist, columns = ['s'])
     # Uncomment to save data
-    df2.to_csv('data/Class363' + str(N) +
-                'WagonsP'+str(round(v0))+
-                'M' + str(M) +'Distances.csv')
+    # df2.to_csv('data/Class363' + str(N) +
+    #             'WagonsP'+str(round(v0))+
+    #             'M' + str(M) +'Distances.csv')
 
 main()

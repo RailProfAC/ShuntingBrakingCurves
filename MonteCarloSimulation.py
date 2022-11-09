@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 # Time package for performance measurements
 import time
-# Statistics package for rare event simulation
-from scipy.stats import norm
 # Pandas for convenient table export
 import pandas as pd
 # Settings for seaborn plots
@@ -98,12 +96,12 @@ def main():
     FLoco = mLoco*aLoco
 
     ##############################
-    # Monte Carlo
+    # Monte Carlo Simulation
     start = time.time()
     np.random.seed(42) # Fix seed
     v0 = 25/3.6
     N = 5 # Number of wagons
-    M = 1e3 # Number of MC iterations
+    M = 1e4 # Number of MC iterations
     # Critical distances
     distcrit = [64, 65, 66, 67, 68, 69]
     slist = [] # List for storage of individual distances
@@ -134,38 +132,39 @@ def main():
         #print(k%10, end = ' ')
     elapsed = time.time()-start
     # Plot histogram
-    # sns.histplot(slist, kde = True, cumulative=True, stat = 'probability',
-    #              color = 'seagreen', label = 'Cumulative Density', bins = 20)
-    # sns.histplot(slist, kde = True, stat = 'probability',
-    #              color = 'navy', label = 'Probability Density', bins = 20)
-    # plt.ylabel('Probability')
-    # plt.xlabel('s/m')
-    # # Uncomment to save figure
+    sns.histplot(slist, kde = True, cumulative=True, stat = 'probability',
+                 color = 'seagreen', label = 'Cumulative Density', bins = 20)
+    sns.histplot(slist, kde = True, stat = 'probability',
+                 color = 'navy', label = 'Probability Density', bins = 20)
+    plt.ylabel('Probability')
+    plt.xlabel('s/m')
+    # Uncomment to save figure
     # plt.savefig('Class363' + str(N) +
     #             'WagonsG'+str(round(v0))+
     #             'M' + str(M) +'.pdf')
-    # # Print statistical values
-    # print('Mean: ' + str(np.mean(slist)))
-    # print('SD  : ' + str(np.std(slist)))
-    # ssorted = np.sort(slist)
-    # if M >= 1e7:
-    #     print('p = 1e-5 for: ' + str(ssorted[-101]))
-    # print('Longest: ' + str(ssorted[-1]))
-    # # Analyse for relative frequency of braking distance above threshold
-    # df = pd.DataFrame(columns = ['s', 'p'])
-    # for d in distcrit:
-    #     p, b = np.histogram(slist, bins = [0, d, 1e6])
-    #     p = p/M
-    #     print('p(s> ' + str(d) + 'm) = ' + str(p[1]))
-    #     df.loc[len(df.index)] = [d, p[1]]
-    # # Uncomment to save data
+
+    # Print statistical values
+    print('Mean: ' + str(np.mean(slist)))
+    print('SD  : ' + str(np.std(slist)))
+    ssorted = np.sort(slist)
+    if M >= 1e7:
+        print('p = 1e-5 for: ' + str(ssorted[-101]))
+    print('Longest: ' + str(ssorted[-1]))
+
+    # Analyse for relative frequency of braking distance above threshold
+    df = pd.DataFrame(columns = ['s', 'p'])
+    for d in distcrit:
+        p, b = np.histogram(slist, bins = [0, d, 1e6])
+        p = p/M
+        print('p(s> ' + str(d) + 'm) = ' + str(p[1]))
+        df.loc[len(df.index)] = [d, p[1]]
+    # Uncomment to save data
     # df.to_excel('Class363' + str(N) +
     #             'WagonsG'+str(round(v0))+
     #             'M' + str(M) +'.xlsx', index=False)
     print('Time: ' + str(np.round(elapsed, decimals = 2)) + ' s')
-    # df2 = pd.DataFrame(data = slist, columns = ['s'])
+    df2 = pd.DataFrame(data = slist, columns = ['s'])
     # # Uncomment to save data
-    # # Save data to file
     # df2.to_csv('Class363' + str(N) +
     #             'WagonsG'+str(round(v0))+
     #             'M' + str(M) +'Distances.csv')

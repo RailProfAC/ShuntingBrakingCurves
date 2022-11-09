@@ -4,7 +4,7 @@ Code and Data for Paper 'Braking curves in low-speed on-sight operation - A simu
 
 ## Code
 
-Please refer to Code.ipynb in this repository for the Jupyter Notebook or the pure python scripts for the Monte Carlo analysis.
+Please refer to Code.ipynb in this repository for the Jupyter Notebook or the pure python scripts for the Monte Carlo analysis. The latter is also available in a multiprocessing code for speed-up of the simulation.
 
 ## Results
 
@@ -20,7 +20,6 @@ p(s> 66m) = 0.0151151
 p(s> 67m) = 0.000284
 p(s> 68m) = 8e-07
 p(s> 69m) = 0.0
-Time: 24464.85 s
 
 ### Brake mode P
 
@@ -38,5 +37,5 @@ p(s> 42m) = 0.0
 
 Results for Safety analysis can be downloaded here:
 
-- [Case brake mode G](https://fh-aachen.sciebo.de/s/QRtEPiZtQ18UG0A)
-- [Case brake mode P](https://fh-aachen.sciebo.de/s/Vq2FZhoucKTgRJp)
+- [Case brake mode G](https://fh-aachen.sciebo.de/s/W9xc0jpdv1gibm5)
+- [Case brake mode P](https://fh-aachen.sciebo.de/s/95BvuS5opZ0LROi)
